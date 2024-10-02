@@ -162,7 +162,8 @@ SELECT * FROM ACTOR;
 3. **Configure Spring Security in a Spring Boot application**
    * In Spring Boot, Spring Security can be configured using SecurityConfig by extending WebSecurityConfigurerAdapter and overriding key methods:
     ```java
-    @Configuration
+   //New version can be referred in this repo no need to extends adaptor or override methods 
+   @Configuration
     @EnableWebSecurity
     public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
