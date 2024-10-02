@@ -71,7 +71,7 @@ The following endpoints are available for testing:
 
 1. **Import Postman Collection**
 
-   Use the Postman collection file [`spring-boot-jwt-example.postman_collection.json`](postman/spring-boot-jwt-example.postman_collection.json) provided in the `/postman` folder to quickly set up your API requests in Postman.
+   Use the Postman collection file along with repo.
 
    **Steps to Import:**
     - Open Postman
