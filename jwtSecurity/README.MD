@@ -143,6 +143,133 @@ For example, you can run:
 SELECT * FROM ACTOR;
 ```
 
+## CONCEPTS
+
+1. **Spring Security**
+   * Spring Security is a framework that provides authentication, authorization, and protection against common attacks (like CSRF) in Java applications. 
+   * It integrates with the Spring Framework through the use of annotations, filters, and security contexts, allowing security concerns to be managed separately from business logic. 
+   * Spring Security integrates seamlessly with Spring MVC, Spring Boot, and other Spring components via auto-configuration.
+
+2. **Architecture of Spring Security**
+   * Spring Security's architecture primarily consists of several core components:
+     * AuthenticationManager: The entry point for authentication.
+     * AuthenticationProvider: Used to process authentication requests.
+     * UserDetailsService: Interface used to retrieve user-related data, typically used by AuthenticationProvider.
+     * GrantedAuthority: Represents roles or privileges.
+     * SecurityContext: Holds the authentication details for a user.
+     * Filters: Spring Security uses a chain of filters (like UsernamePasswordAuthenticationFilter) to process security-related tasks.
+
+3. **Configure Spring Security in a Spring Boot application**
+   * In Spring Boot, Spring Security can be configured using SecurityConfig by extending WebSecurityConfigurerAdapter and overriding key methods:
+    ```java
+    @Configuration
+    @EnableWebSecurity
+    public class SecurityConfig extends WebSecurityConfigurerAdapter {
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+    http
+    .authorizeRequests()
+    .antMatchers("/admin/**").hasRole("ADMIN")
+    .antMatchers("/user/**").hasRole("USER")
+    .antMatchers("/", "/public").permitAll()
+    .and()
+    .formLogin()
+    .and()
+    .logout();
+    }
+    }
+   ```
+   * Spring Boot also provides some default security configurations out of the box if no explicit configuration is defined.
+
+4. **Difference between @PreAuthorize and @Secured**
+   * @PreAuthorize: It is part of Spring EL (SpEL) and allows for more complex expression-based access control. It can evaluate roles, permissions, and other conditions.
+   ```
+   @PreAuthorize("hasRole('ADMIN') and #id == principal.id")
+    ```
+
+    * @Secured: It is a simpler annotation that checks for specific roles and cannot handle more complex expressions.
+   ```
+    @Secured("ROLE_ADMIN")
+   ```
+
+5. **Role of SecurityContextHolder**
+   * The SecurityContextHolder holds the SecurityContext containing the authentication and security information for the current execution thread. 
+   * It can be accessed statically from anywhere in the application, which makes it useful for checking the current user’s security details.
+
+6. **Spring Security handle CSRF (Cross-Site Request Forgery)**
+   * Spring Security provides built-in support for CSRF protection by generating a unique token for each session or request. 
+   * This token is then required to be included in the request, preventing malicious actors from forging requests on behalf of authenticated users. 
+   * By default, Spring Security enables CSRF protection in form-based authentication:
+   ```java
+   @Override
+   protected void configure(HttpSecurity http) throws Exception {
+   http
+   .csrf().enable();
+   }
+   ```
+
+   * You can also disable it for certain endpoints (e.g., APIs):
+    ```
+    http
+   .csrf().disable();
+   ```
+
+7. **Different types of authentication mechanisms supported**
+   * Spring Security supports a variety of authentication mechanisms:
+     * Form-based Authentication: Using an HTML form to gather username and password.
+     * Basic Authentication: Sends credentials via HTTP headers (username and password encoded in base64).
+     * Digest Authentication: Similar to Basic but more secure (password hashing and nonces).
+     * OAuth2: Token-based authentication for APIs.
+     * JWT Authentication: JSON Web Tokens used to manage stateless sessions.
+     * LDAP: Authentication via LDAP protocol.
+     * SAML: Used for single sign-on (SSO) with external providers.
+
+8. **Spring Security handle method-level security**
+   * Method-level security in Spring Security can be enabled with annotations like @PreAuthorize, @PostAuthorize, @Secured, and @RolesAllowed. It provides fine-grained access control over service methods. Method-level security can be enabled using @EnableGlobalMethodSecurity annotation:
+   ```java
+   @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
+   public class MethodSecurityConfig extends GlobalMethodSecurityConfiguration {
+   }
+   ```
+
+
+9. **Role of GrantedAuthority**
+   * GrantedAuthority is used to represent the authorities (or roles) granted to a user. 
+   * It is an interface that typically contains the user’s roles or permissions. 
+   * Each authenticated user will have a collection of GrantedAuthority objects, which Spring Security uses to determine if they have the appropriate permissions to access a resource.
+
+10. **How does Spring Security handle stateless authentication?**
+    * Stateless authentication is typically implemented using JWT (JSON Web Tokens). 
+    * Instead of maintaining a session, the server issues a token (JWT) after successful authentication. 
+    * The token is then passed along with each request in the Authorization header. 
+    * Spring Security can validate the token and extract the user details from it without storing session data.
+
+11. **What are filters in Spring Security, and how do they work?**
+    * Filters in Spring Security are part of the Servlet Filter chain and are used to process incoming requests before they reach the controller. 
+    * They handle authentication, authorization, CSRF protection, etc. Key filters include:
+      * UsernamePasswordAuthenticationFilter: Processes login requests.
+      * BasicAuthenticationFilter: Processes HTTP Basic authentication.
+      * JwtAuthenticationFilter: Custom filters for handling JWT tokens.
+
+12. **What is OAuth2 and how is it integrated with Spring Security**
+    * OAuth2 is an authorization framework that enables third-party services to exchange tokens for granting access to protected resources. 
+    * Spring Security provides support for OAuth2 through Spring Security OAuth and Spring Security OAuth2 Client. 
+    * Spring Boot makes it easier to configure OAuth2 login with minimal configuration.
+    ```java
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+    http
+    .oauth2Login();
+    }
+    ```
+
+
+13. **Difference between hasRole and hasAuthority**
+    * In Spring Security, hasRole assumes that roles are prefixed with ROLE_. For example, hasRole('ADMIN') expects a GrantedAuthority of ROLE_ADMIN. 
+    * hasAuthority, on the other hand, does not apply any prefix and checks for an exact match of the authority. 
+    * So hasAuthority('ADMIN') looks for an exact match without any prefix.
+
+
 
 
  
