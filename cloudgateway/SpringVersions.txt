@@ -1,0 +1,50 @@
+Spring Framework Versions
+
+Spring Framework 4.x (December 2013)
+Java 8 Support: Provided compatibility with Java 8 language features like lambdas and streams.
+WebSocket Support: Added WebSocket and STOMP messaging support, enabling real-time applications.
+Java-based Configuration Enhancements: Expanded support for Java-based configuration over XML.
+Annotation-based Programming: Improved annotation support, focusing on @RestController, @Async, and more.
+Groovy Support: Added Groovy as an alternative language for building Spring applications.
+Spring Web MVC: Introduced @RestController to simplify RESTful APIs.
+
+Spring Framework 5.x (September 2017)
+Reactive Programming: Introduced WebFlux, supporting reactive programming with Mono and Flux types.
+Java 8 and Java 9 Baseline: Required Java 8+, added support for Java 9 modularity.
+Kotlin Support: Official Kotlin support, including dedicated extensions and DSLs.
+HTTP/2 and WebSockets Enhancements: Improved WebSocket support and added HTTP/2 compatibility.
+Functional Bean Registration: Introduced functional bean definitions with Java lambdas.
+Spring Core Improvements: Enhanced dependency injection, @Nullable annotations, and more fine-tuned caching.
+
+Spring Framework 6.x (November 2022)
+Java 17 Baseline: Set Java 17 as the minimum supported version.
+Jakarta EE Migration: Shifted from javax.* to jakarta.* namespace, supporting Jakarta EE 9+.
+AOT Processing: Improved Ahead-Of-Time (AOT) processing, optimizing Spring apps for GraalVM Native Image.
+Observability: Integrated observability with Micrometer, adding metrics and tracing as first-class features.
+Enhanced HTTP/2 and gRPC Support: Improved support for HTTP/2 and introduced gRPC integration.
+Kotlin Enhancements: Refined Kotlin DSLs, extensions, and interoperability.
+Improved Functional Programming and Modularization: Enhanced functional style and modularity in bean configurations.
+
+Spring Boot Versions
+
+Spring Boot 1.x (April 2014)
+Auto-configuration: Introduced auto-configuration, making it easier to start with Spring-based projects.
+Embedded Server Support: Enabled embedded server options (Tomcat, Jetty) for simplified deployments.
+Spring Boot CLI: Allowed rapid development with Groovy, facilitating scripting and testing.
+Actuator: Introduced Actuator for application monitoring with endpoints like /health and /metrics.
+
+Spring Boot 2.x (March 2018)
+Java 8 and Spring 5 Baseline: Required Java 8+ and Spring Framework 5.x.
+Reactive Programming: Added full reactive support with Spring WebFlux.
+Actuator Improvements: Expanded Actuator with better monitoring and customizable endpoints.
+Micrometer Integration: Added Micrometer for metrics, supporting various monitoring systems like Prometheus.
+Enhanced Testing: Improved testing support with more annotation-based configurations.
+Kotlin Support: Enhanced Kotlin support, aligning with Spring Framework 5.x.
+
+Spring Boot 3.x (November 2022)
+Java 17 and Spring 6 Baseline: Required Java 17+ and Spring Framework 6.
+Jakarta EE 9 Migration: Shifted to the jakarta.* namespace, aligning with Jakarta EE 9+.
+AOT Compilation and GraalVM Support: Improved AOT compilation for GraalVM native image builds.
+Observability via Micrometer: Integrated tracing and metrics, enhancing observability with OpenTelemetry.
+Enhanced Docker and Kubernetes Support: Improved support for containerized environments.
+Improved Security Features: Enhanced security defaults, including support for OpenID Connect (OIDC) and OAuth 2.
