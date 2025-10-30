@@ -10,6 +10,9 @@ bin/kafka-console-consumer.sh --topic test-topic --from-beginning --bootstrap-se
 * Stop Kafka: bin/kafka-server-stop.sh
 * Stop Zookeeper: bin/zookeeper-server-stop.sh
 
+## Configurations
+* Handling Json for msg: For object serialization/deserialization application.properties can be used **spring.kafka.producer.value-serializer, spring.kafka.consumer.value-deserializer**
+
 ### Kafka System Workflow:
 * Producer sends messages to a topic (specific partitions).
 * The broker receives and stores the message.

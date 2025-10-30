@@ -1,0 +1,180 @@
+# ======================================================================
+# 🧠 BASIC KAFKA CONNECTION
+# ======================================================================
+spring.kafka.bootstrap-servers=localhost:9092
+# → Comma-separated list of Kafka brokers your app connects to
+# Example for cluster: kafka1:9092,kafka2:9092,kafka3:9092
+
+
+# ======================================================================
+# 📨 PRODUCER CONFIGURATIONS
+# ======================================================================
+
+# ---------- Serialization ----------
+spring.kafka.producer.key-serializer=org.apache.kafka.common.serialization.StringSerializer
+# → Serializer for message key (convert key to bytes)
+spring.kafka.producer.value-serializer=org.springframework.kafka.support.serializer.JsonSerializer
+# → Serializer for message value (convert object → JSON → bytes)
+
+# ---------- Acknowledgment / Reliability ----------
+spring.kafka.producer.acks=all
+# → ‘all’ ensures leader + replicas acknowledge (highest durability)
+# Options: 0 (no ack), 1 (leader only), all (leader + in-sync replicas)
+
+spring.kafka.producer.retries=3
+# → Retry sending message up to 3 times if transient failure
+
+spring.kafka.producer.properties.enable.idempotence=true
+# → Ensures no duplicate messages during retries (for exactly-once)
+
+spring.kafka.producer.properties.max.in.flight.requests.per.connection=5
+# → Controls how many unacknowledged requests per connection (reduce for ordering guarantee)
+
+spring.kafka.producer.properties.delivery.timeout.ms=120000
+# → Max time producer will try to deliver before giving up (default: 2 min)
+
+# ---------- Batching & Performance ----------
+spring.kafka.producer.properties.linger.ms=5
+# → Wait time before sending batch (in ms). Higher = better batching efficiency.
+
+spring.kafka.producer.properties.batch.size=32768
+# → Max bytes per batch (default: 16KB → 16384). Larger = more throughput, more memory.
+
+spring.kafka.producer.buffer-memory=33554432
+# → Total buffer memory for producer (default 32MB)
+
+spring.kafka.producer.compression-type=gzip
+# → Compress messages before sending (options: none, gzip, snappy, lz4, zstd)
+
+# ---------- Transactions ----------
+spring.kafka.producer.transaction-id-prefix=txn-
+# → Enables Kafka transactions for exactly-once delivery across multiple sends
+
+# ---------- Security (Optional) ----------
+spring.kafka.properties.security.protocol=PLAINTEXT
+# → Default: PLAINTEXT; for secure clusters use SASL_SSL or SSL
+
+# ======================================================================
+# 🧭 CONSUMER CONFIGURATIONS
+# ======================================================================
+
+# ---------- Group & Offset ----------
+spring.kafka.consumer.group-id=demo-group
+# → Identifies this consumer group for coordinated consumption
+
+spring.kafka.consumer.auto-offset-reset=earliest
+# → If no offset found, start from earliest message (options: latest / earliest / none)
+
+spring.kafka.consumer.enable-auto-commit=false
+# → Manually control when offsets are committed (for reliability)
+
+spring.kafka.consumer.auto-commit-interval=1000
+# → If auto-commit = true, commits offsets every 1s
+
+# ---------- Deserialization ----------
+spring.kafka.consumer.key-deserializer=org.apache.kafka.common.serialization.StringDeserializer
+# → Converts key bytes back to String
+
+spring.kafka.consumer.value-deserializer=org.springframework.kafka.support.serializer.JsonDeserializer
+# → Converts JSON back to POJO
+
+spring.kafka.consumer.properties.spring.json.trusted.packages=*
+# → Allows deserializing classes from any package (can restrict for security)
+
+spring.kafka.consumer.properties.spring.json.value.default.type=com.example.model.User
+# → Optional: specify a default type for deserialization
+
+# ---------- Polling / Throughput ----------
+spring.kafka.consumer.max-poll-records=500
+# → Number of messages to fetch in one poll (default: 500)
+
+spring.kafka.consumer.fetch-min-bytes=1
+# → Minimum data (in bytes) before server responds to fetch request
+
+spring.kafka.consumer.fetch-max-wait=500
+# → Max time (ms) server waits for min bytes before responding
+
+spring.kafka.consumer.properties.max.poll.interval.ms=300000
+# → Max interval between polls before consumer considered dead
+
+spring.kafka.consumer.properties.session.timeout.ms=45000
+# → How long broker waits for heartbeat before marking consumer dead
+
+# ---------- Isolation (for transactions) ----------
+spring.kafka.consumer.isolation-level=read_committed
+# → Only read committed (finalized) messages from transactional producers
+
+# ======================================================================
+# 🔄 COMMON SETTINGS
+# ======================================================================
+
+spring.kafka.listener.missing-topics-fatal=false
+# → Prevents app crash if topic doesn’t exist at startup
+
+spring.kafka.listener.ack-mode=manual_immediate
+# → How listener acknowledges message (manual, record, batch, time, count, manual_immediate)
+
+spring.kafka.listener.concurrency=3
+# → Number of concurrent threads to process messages from topic partitions
+
+spring.kafka.template.default-topic=demo-topic
+# → Default topic when sending messages without specifying topic
+
+spring.kafka.properties.request.timeout.ms=30000
+# → Timeout for producer requests (default 30s)
+
+spring.kafka.properties.metadata.max.age.ms=300000
+# → How often to refresh broker metadata (default 5 min)
+
+spring.kafka.properties.client.id=my-app
+# → Custom ID for producer/consumer (helps in monitoring/logging)
+
+
+# ======================================================================
+# 🔐 SECURITY CONFIGURATIONS (Optional, for production)
+# ======================================================================
+
+# ---------- SSL Encryption ----------
+# spring.kafka.properties.security.protocol=SSL
+# spring.kafka.properties.ssl.truststore.location=/path/to/truststore.jks
+# spring.kafka.properties.ssl.truststore.password=truststore-pass
+# spring.kafka.properties.ssl.keystore.location=/path/to/keystore.jks
+# spring.kafka.properties.ssl.keystore.password=keystore-pass
+# spring.kafka.properties.ssl.key.password=key-pass
+
+# ---------- SASL Authentication ----------
+# spring.kafka.properties.security.protocol=SASL_SSL
+# spring.kafka.properties.sasl.mechanism=PLAIN
+# spring.kafka.properties.sasl.jaas.config=org.apache.kafka.common.security.plain.PlainLoginModule required username="user" password="pass";
+
+# ======================================================================
+# 🧱 ADMIN CLIENT CONFIGS
+# ======================================================================
+spring.kafka.admin.client-id=admin-client
+# → Used when creating topics programmatically
+
+spring.kafka.admin.properties.retries=5
+# → Number of retries for admin operations (e.g., topic creation)
+
+spring.kafka.admin.fail-fast=true
+# → Fail startup if Kafka not reachable
+
+
+# ======================================================================
+# 🧩 ADVANCED (Optional / For Tuning)
+# ======================================================================
+spring.kafka.properties.reconnect.backoff.ms=50
+# → Initial wait before reconnecting to broker after failure
+
+spring.kafka.properties.reconnect.backoff.max.ms=1000
+# → Max wait before reconnect attempts increase
+
+spring.kafka.properties.retry.backoff.ms=100
+# → Wait before retrying failed produce/consume
+
+spring.kafka.properties.receive.buffer.bytes=65536
+spring.kafka.properties.send.buffer.bytes=131072
+# → Socket buffers (affects throughput)
+
+spring.kafka.properties.fetch.max.bytes=52428800
+# → Max bytes the broker can send to consumer in one fetch (default: 50 MB)
